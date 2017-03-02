@@ -1,0 +1,35 @@
+reset
+datafile = "result.dat"
+set term postscript enhanced eps color dashed 16 lw 2 dl 2
+
+#parameters from halle
+alpha = 0.0012089704
+n = 5.4835
+m = 0.817634722 #(1-1/n)
+
+pc(x)=1/alpha*(x**(-1/m)-1)**(1/n)
+a = 234
+b = 3858
+c = -0.224
+d = -3992
+e = 0.006
+f = 1.283e-5
+
+
+f(x)=a + b*x + c*pc(x)+d*x*x + e*x*pc(x)+f*pc(x)*pc(x)
+#f(x) = pc(x)
+
+set title "Interfacial ares"
+set samples 10000
+set xrange[1:0.01]
+set yrange[0:*]
+
+set xlabel "water saturation"
+set ylabel "interfacial area (mm^{-1})"
+
+set output "exchange.eps"
+
+fit f(x) "data_to_fit.dat" via a,b,c,d,e,f
+#set xrange[1:0.9]
+#plot f(x) w l
+plot datafile using 1:2 w l ti "Gvirtzman", datafile u 1:3 w l ti "Niemet", datafile u 1:4 w l ti "Miller", datafile u 1:5 w l ti "Joekar-Niasar", datafile u 1:6 w l ti "Geistlinger" , f(x) w l ti "fit", "data_to_fit.dat" with xerrorbars notitle

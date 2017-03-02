@@ -1,0 +1,45 @@
+#graphical output for end time of simulation
+#comparison between numerical solution and data in profile.dat
+reset
+
+datafile = datapath."_data.dat"
+soliddatafile = "/export/home/dune/dune048/dune/dune-dycap/appl/nanoparticles/data/solid.dat"
+solutionfile = results."param_".oname.".sol"
+out = outputpath.oname.".eps"
+
+print "datafile = ", datafile
+print "out = ", out
+print "solution = ", solutionfile
+unset print
+set term postscript enhanced eps monochrome dashed 16 lw 2 dl 2
+
+set pointsize 3
+#set size 2.0, 1.3
+LW=3
+set style line 20 lt 4 lw LW pt 12 linecolor rgb "black"
+set style line 21 lt 2 lw LW linecolor rgb "black"
+set style line 22 lt 1 lw LW linecolor rgb "black"
+
+#set style data linespoints;
+#set title "Break through curve"
+
+set output out
+set xrange[*:*]
+set yrange[*:*]
+
+set xlabel "Time [h]"
+set ylabel "Normalized concentration [-]"
+plot \
+     datafile using ($1/3600):2 ls 20 with points ti "experiment",\
+     solutionfile using ($1/3600):2 index 0  w l ls 21 ti "numerical simulation";
+
+out = outputpath.oname."_solid.eps"
+set output out
+set ylabel "Depth [cm]"
+set xlabel "Normalized concentration [mL/g]"
+set x2tics
+
+factor = 1000
+plot \
+     soliddatafile using 2:(-$1+10) ls 20 axes x2y1 with points ti "experiment",\
+     solutionfile using  ($2*factor):(-$1*100+10) index 1  w l ls 21  axes x2y1 ti "numerical simulation";

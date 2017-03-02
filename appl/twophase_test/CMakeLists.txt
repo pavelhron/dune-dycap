@@ -1,0 +1,2 @@
+add_executable(twophase_boilerplate twophase_boilerplate.cc)
+dune_symlink_to_source_files(FILES twophase_boilerplate.ini)

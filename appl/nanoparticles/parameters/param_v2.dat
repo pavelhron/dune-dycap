@@ -1,0 +1,8 @@
+# parameters to be fit
+Dt 1.294575649e-07 1 1.e-10	3.e-5
+velocity 1.28589555e-05 1 1.e-6 4.e-4
+katt 2.746 1 0.0 200
+Smax 50.e-4  1 0.0 1
+beta 1.8 1 0.1 5
+riso 0.035  1 0.0 1
+kdet 0.0 1 0. 5
