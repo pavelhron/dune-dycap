@@ -1,0 +1,32 @@
+reset
+set terminal postscript eps enhanced color "Helvetica" 20
+set output 'comparison_intensity_experiment.eps'
+
+set title "Ecoli growth, vertical cut at 20 cm"
+
+set pointsize 3
+PT = 9
+LW = 5
+set style line 1 lt 1 lw LW pt 3 linecolor rgb "red"
+set style line 2 lt 1 lw LW pt 3 linecolor rgb "green"
+set style line 3 lt 1 lw LW pt 3 linecolor rgb "blue"
+set style line 4 lt 1 lw LW pt 3 linecolor rgb "magenta"
+set style line 5 lt 1 lw LW pt 3 linecolor rgb "orange"
+
+
+set yrange [0.:30]
+set ylabel "h [cm]"
+
+
+set samples 10000
+
+set xtics 3.0e8 nomirror
+set xlabel  "Ecoli cells/cm^3"
+set xrange [0.:1.6e9]
+set x2range [0.:1.]
+
+plot 'transport-0l2d.dat' using 2:($1*100)  w l lt 1 lw LW axes x2y1 title   "water saturation",  \
+'ecoli_intensity.dat' using 5:1 with p pointtype 9 axes x2y1 ti  "relative intensity", \
+'transport-0l2d.dat' using ($6):($1*100)  w l lt 14 lc rgb "blue" lw LW ti "Ecoli, simulation"
+
+

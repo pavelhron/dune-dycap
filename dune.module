@@ -1,0 +1,11 @@
+################################
+# Dune module information file #
+################################
+
+#Name of the module
+Module: dune-dycap
+Version: 2.1
+Maintainer: pavel.hron@iwr.uni-heidelberg.de
+#depending on
+Depends: dune-common (>= 2.4.1) dune-geometry (>= 2.4.1) dune-grid (>= 2.4.1) dune-istl (>= 2.4.1) dune-localfunctions (>= 2.4.1) dune-typetree (>= 2.4.1) dune-pdelab (>= 2.4.1)
+Whitespace-Hook: Yes

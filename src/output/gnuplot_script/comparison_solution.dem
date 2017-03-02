@@ -1,0 +1,40 @@
+reset
+ set terminal postscript landscape enhanced monochrome dashed defaultplex "Helvetica" 20
+set output 'saturation.eps'
+
+
+#parameters from halle
+alpha2 = 0.000717635
+n2 = 5.5
+
+alpha3 = 0.001223242
+n3 = 5.5
+
+set pointsize 3
+PT = 9
+LW = 8
+set style line 1 lt 1 lw LW pt 3 linecolor rgb "red"
+set style line 2 lt 1 lw LW pt 3 linecolor rgb "green"
+set style line 3 lt 1 lw LW pt 3 linecolor rgb "blue"
+set style line 4 lt 1 lw LW pt 3 linecolor rgb "magenta"
+set style line 5 lt 1 lw LW pt 3 linecolor rgb "orange"
+
+#p = h*rho*g
+rhog=98.1;
+set yrange [0.:30]
+#set xrange [0.1:1]
+set ylabel "h [cm]"
+set xlabel "[-]"
+
+set samples 1000
+
+set xrange [0.:1.]
+pc_vg2(x)=1/alpha2*(x**(-n2/(n2-1))-1)**(1/n2)
+pc_vg3(x)=1/alpha3*(x**(-n3/(n3-1))-1)**(1/n3)
+pc_bc(x)=pd*x**(-1/lambda)
+
+watertable = 4.
+
+plot 'transport-0l2d.dat' using 2:($1*100) w l ls 3 ti "water saturation",  'ecoli_intensity.dat' using 3:1 with p pointtype 4 ti "relative intensity", 'ecoli_intensity.dat' using 5:1 with p pointtype 8 ti "relative intensity, middle", 'transport-0l2d.dat' using ($7/):($1*100) w l ls 1 ti "Ecoli, simulation"
+
+

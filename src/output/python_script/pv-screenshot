@@ -1,0 +1,63 @@
+#! /usr/bin/python
+# usage: pv-screenshot <input-file (*.pvd)> <time> [<text>] [<image-file (*.png)>]
+
+from paraview.simple import *
+import sys
+
+data_file = sys.argv[1]
+time = float(sys.argv[2])
+try:
+    text = sys.argv[3]
+except:
+    text = None
+try:
+    image_file = sys.argv[4]
+except:
+    image_file = None
+print "{0} @ {1}".format(data_file, time)
+
+col_bg = [1.0, 1.0, 1.0]
+col_fg = [0.0, 0.0, 0.0]
+
+view = GetRenderView()
+view.Background = col_bg
+view.OrientationAxesVisibility = 0
+view.CenterAxesVisibility = 0
+view.ViewSize = [800, 800]
+view.CameraParallelProjection = 1
+view.ViewTime = time
+
+data = OpenDataFile(data_file)
+(min, max) = data.PointData["x_1"].GetRange()
+Show()
+
+lt = GetLookupTableForArray("x_1", 1, RGBPoints = [
+        min, 0.22745098039215686, 0.2980392156862745, 0.7568627450980392,
+        max, 0.7058823529411765, 0.01568627450980392, 0.14901960784313725,
+        ], ColorSpace = "Diverging")
+rep = GetDisplayProperties(data)
+rep.Representation = 'Surface'
+rep.LookupTable = lt
+rep.ColorAttributeType = 'POINT_DATA'
+rep.ColorArrayName = 'x_1'
+
+bar = CreateScalarBar(LookupTable=lt, Title="x_1")
+bar.LabelColor = bar.TitleColor = col_fg
+view.Representations.append(bar)
+
+atime = AnnotateTime(Format='Time: %.2e')
+SetActiveSource(atime)
+atime_rep = Show()
+atime_rep.Color = col_fg
+
+if text is not None:
+    t = Text(Text=text)
+    tr = Show()
+    tr.Color = col_fg
+    tr.Position = [0.50, 0.05]
+
+Render()
+if image_file is not None:
+    WriteImage(image_file)
+else:
+    sys.stdin.read()

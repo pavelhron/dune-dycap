@@ -71,7 +71,7 @@
 template<class G>
 void run (const G& g, const HeleshawDomain<G::dimension> & domain, Dune::ParameterTree & param)
 {
-  
+
   // std::cout << "number of boundary segments " << g.numBoundarySegments() << std::endl;
   typedef typename G::LeafGridView GV;
   GV gv = g.leafGridView();
@@ -256,7 +256,7 @@ void run (const G& g, const HeleshawDomain<G::dimension> & domain, Dune::Paramet
   NewtonParameters newtonparameters(param.sub("Newton"));
   // set new parameters
   newtonparameters.set(newton);
-  
+
   // time-stepper
   Dune::PDELab::OneStepMethod<RF,IGO,PDESOLVER,V,V> osm(method,igo,newton);
   osm.setVerbosityLevel(verbosityInstationary);
@@ -271,17 +271,17 @@ void run (const G& g, const HeleshawDomain<G::dimension> & domain, Dune::Paramet
   /*******************************************************************/
   /************************** COMPUTATION  ***************************/
   /*******************************************************************/
-  
+
   int counter = 0;
   // get initial timestep
   timemanager.set_dt(timestep);
   RF tstep = timemanager.getTimeStepSize();
-  
+
   std::cout << "timestep init " << tstep << std::endl;
   while (!timemanager.finalize())
     {
       tstep = timemanager.getTimeStepSize();
-      
+
       if (gv.comm().rank() == 0)
         std::cout << "============= Timestep " << counter  << "\n";
 
@@ -435,8 +435,8 @@ int main(int argc, char** argv)
 
         // make grid
         Dune::FieldVector<double,3> L;
-        L[0] = domain.width; 
-        L[1] = domain.depth; 
+        L[0] = domain.width;
+        L[1] = domain.depth;
         L[2] = domain.height;
         Dune::array<int,3> N;
         N[0] = domain.nx;

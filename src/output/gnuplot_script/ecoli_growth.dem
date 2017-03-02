@@ -1,0 +1,46 @@
+#this gnuplot script serves to compare analytical, numerical and experimental solution
+#for oxygen transport under steady-state condition
+
+reset
+set term postscript enhanced color solid lw 2 "Helvetica" 30
+set output "ecoli_anaerobic_arbitraryDOC.eps"
+set size 2.0, 1.3
+set origin 0.0, 0.0
+#set multiplot
+#set size 1.,1.
+#set origin 0.0,0.
+set key left top
+set format x "%1.0f"
+set xlabel "t [h]"
+set ylabel "nr. cells/ml"
+weight = 2.e-9
+set pointsize 5
+PT = 9
+LW = 5
+
+set style line 1 lt 1 lw LW pt 3 linecolor rgb "red"
+set style line 2 lt 1 lw LW pt 3 linecolor rgb "green"
+set style line 3 lt 1 lw LW pt 3 linecolor rgb "blue"
+set style line 4 lt 1 lw LW pt 3 linecolor rgb "magenta"
+set style line 5 lt 1 lw LW pt 3 linecolor rgb "orange"
+
+set xrange[0:145]
+#set size 1.,1.
+#set origin 1.0,0.0
+set key left top
+set format x "%1.0f"
+set xlabel "t [h]"
+set ylabel "nr. cells/ml"
+weight = 2.e-9
+
+set title "anaerobic E.coli growth, arbitrary DOC dilutions, simulation"
+plot  "anaerobic_data_data.dat" u ($1)/3600:($2)/weight w p pt PT lc rgb "red"  noti, \
+"anaerobic_data_data.dat" u ($1)/3600:($3)/weight w p pt PT lc rgb "green"  noti, \
+"anaerobic_data_data.dat" u ($1)/3600:($4)/weight w p pt PT lc rgb "blue"  noti, \
+"anaerobic_data_data.dat" u ($1)/3600:($5)/weight w p pt PT lc rgb "magenta"  noti, \
+"anaerobic_data_solution.dat" every :::0::0 u 1:($2)/weight w l ls 1  ti "LB 1:1", \
+"anaerobic_data_solution.dat" every :::1::1 u 1:($2)/weight w l ls 2  ti "LB 1:2", \
+"anaerobic_data_solution.dat" every :::2::2 u 1:($2)/weight w l ls 3  ti "LB 1:5", \
+"anaerobic_data_solution.dat" every :::3::3 u 1:($2)/weight w l ls 4  ti "LB 1:10"
+
+#unset multiplot

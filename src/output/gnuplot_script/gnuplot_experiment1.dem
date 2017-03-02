@@ -1,0 +1,130 @@
+#this gnuplot script serves to compare analytical, numerical and experimental solution
+#for oxygen transport under steady-state condition
+
+reset
+set terminal postscript enhanced color
+#set term post eps
+#color "Helvetica " 18
+set title "Experiment 1, Oxygen cut at 45 cm"
+set output "experiment1_cut45_normalized.eps"
+#set data style linespoints
+set grid nopolar
+#set key inside left top
+set grid xtics nomxtics ytics nomytics noztics nomztics \
+ nox2tics nomx2tics noy2tics nomy2tics nocbtics nomcbtics
+set grid front   linetype 0 linewidth 1.000,  linetype 0 linewidth 1.000
+set xrange [-0.1:1.1]
+#set logscale x 2
+#set logscale y 2
+set xlabel "Normalized O2 concentration [-] "
+set ylabel "y [m]"
+set parametric
+set samples 10000
+xconst = 0.45 #z=t
+
+Dtcf =  1.15e-8
+Dtsz = 1.11e-8
+va = 0.000205324
+water_height = 0.295
+height_port = 0.13125
+Z = 0.00625
+set trange [0.:water_height]
+#sz
+f1(t) =1.*( erf((t+Z/2.0-height_port)/(2*sqrt(Dtsz*xconst/va)))- erf((t-Z/2.-height_port)/(2*sqrt(Dtsz*xconst/va))) )
+#CF
+f2(t) = erfc((water_height-t)/(2*sqrt(Dtcf*xconst/va)))
+f(t) = (t < 0.2) ? f1(t) : f2(t)
+
+plot \
+"p0001:experiment1_reconstruction-3l2d45.dat" using 7:1 w l lt 1 lw 4 title "simulation, h=4.1 mm", \
+"p0001:experiment1_reconstruction-2l2d45.dat" using 7:1 w l lt 5 lw 4 title "simulation, h=2 mm", \
+"./O2-profile/experiment1_45cm.dat" using 3:($1/100) lt 2 lw 4 title "experiment 1",\
+ f(t),t lt 3 lw 2 title "analytical solution"
+
+reset
+set terminal postscript color
+#set term post eps
+#color "Helvetica " 18
+set title "Experiment 1, Oxygen cut at 60 cm"
+set output "experiment1_cut60_normalized.eps"
+#set data style linespoints
+set grid nopolar
+#set key inside left top
+set grid xtics nomxtics ytics nomytics noztics nomztics \
+ nox2tics nomx2tics noy2tics nomy2tics nocbtics nomcbtics
+set grid front   linetype 0 linewidth 1.000,  linetype 0 linewidth 1.000
+set xrange [-0.1:1.1]
+#set logscale x 2
+#set logscale y 2
+set xlabel "Normalized O2 concentration [-] "
+set ylabel "y [m]"
+set parametric
+set samples 10000
+xconst = 0.60 #z=t
+Dtcf =  1.25e-8
+Dtsz = 1.19e-8
+va = 0.000205324
+water_height = 0.295
+height_port = 0.13125
+Z = 0.00625
+set trange [0.:water_height]
+#sz
+f1(t) =1.*( erf((t+Z/2.0-height_port)/(2*sqrt(Dtsz*xconst/va)))- erf((t-Z/2.-height_port)/(2*sqrt(Dtsz*xconst/va))) )
+#CF
+f2(t) = erfc((water_height-t)/(2*sqrt(Dtcf*xconst/va)))
+f(t) = (t < 0.2) ? f1(t) : f2(t)
+
+c(t) = height_port
+
+plot \
+ "p0001:experiment1_reconstruction-3l2d60.dat" using 7:1 w l lt 1 lw 4 title "simulation, h=4.1 mm", \
+ "p0001:experiment1_reconstruction-2l2d60.dat" using 7:1 w l lt 5 lw 4 title "simulation, h=2 mm", \
+ "./O2-profile/experiment1_60cm.dat" using 3:($1/100) lt 2 lw 4 title "experiment 1",\
+ f(t),t lt 3 lw 2 title "analytical solution"
+#"steady_state-3l2d60.dat" using 7:1 w l lt 4 lw 4 title "simulation, noreconstruction", \
+
+reset
+set terminal postscript enhanced color
+#set term post eps
+#color "Helvetica " 18
+set title "Experiment 1, Oxygen cut at 45 cm"
+set output "experiment1_cut45.eps"
+#set data style linespoints
+set grid nopolar
+#set key inside left top
+set grid xtics nomxtics ytics nomytics noztics nomztics \
+ nox2tics nomx2tics noy2tics nomy2tics nocbtics nomcbtics
+set grid front   linetype 0 linewidth 1.000,  linetype 0 linewidth 1.000
+#set xrange [-0.1:1.1]
+#set logscale x 2
+#set logscale y 2
+set samples 10000
+set xlabel "O2 concentration [mol/m^3] "
+set ylabel "y [m]"
+plot \
+"p0001:experiment1_reconstruction-3l2d45.dat" using 5:1 w l lt 1 lw 4 title "simulation, h=4.1 mm", \
+"p0001:experiment1_reconstruction-2l2d45.dat" using 5:1 w l lt 5 lw 4 title "simulation, h=2 mm", \
+"./O2-profile/experiment1_45cm.dat" using 2:($1/100) lt 2 lw 4 title "experiment 1"
+
+
+
+reset
+set terminal postscript enhanced color
+#set term post eps
+#color "Helvetica " 18
+set title "Experiment 1, Oxygen cut at 60 cm"
+set output "experiment1_cut60.eps"
+set grid nopolar
+set grid xtics nomxtics ytics nomytics noztics nomztics \
+ nox2tics nomx2tics noy2tics nomy2tics nocbtics nomcbtics
+set grid front   linetype 0 linewidth 1.000,  linetype 0 linewidth 1.000
+#set xrange [-0.1:1.1]
+#set logscale x 2
+#set logscale y 2
+set samples 10000
+set xlabel "O2 concentration [mol/m^{3}] "
+set ylabel "y [m]"
+plot \
+"p0001:experiment1_reconstruction-3l2d60.dat" using 5:1 w l lt 1 lw 4 ti "simulation, h=4.1 mm", \
+"p0001:experiment1_reconstruction-2l2d60.dat" using 5:1 w l lt 5 lw 4 ti "simulation, h=2 mm", \
+"./O2-profile/experiment1_60cm.dat" using 2:($1/100) lt 2 lw 4 ti "experiment 1"
