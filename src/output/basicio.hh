@@ -6,6 +6,8 @@
 #include <stdint.h>
 #include <iostream>
 
+/** \brief Writing of solution vector.
+ */
 template< typename GFS, typename U >
 void writeGFSVector(std::ofstream & file, const GFS & gfs, const U & u)
 {
@@ -17,6 +19,8 @@ void writeGFSVector(std::ofstream & file, const GFS & gfs, const U & u)
     file.write((char*)&(*it),sizeof(typename U::field_type));
 }
 
+/** \brief Reading of stored solution vector.
+ */
 template< typename GFS, typename U >
 void readGFSVector
 (std::ifstream & file, const GFS & gfs, U & u)
@@ -38,6 +42,8 @@ void readGFSVector
     file.read((char*)&(*it),sizeof(typename U::field_type));
 }
 
+/** \brief Writing of std solution vector.
+ */
 template< typename V >
 void writeSTDVector(std::ofstream & file, const V & v)
 {
@@ -50,6 +56,8 @@ void writeSTDVector(std::ofstream & file, const V & v)
     file.write((char*)&(v[i]),sizeof(VT));
 }
 
+/** \brief Reading of stored std solution vector.
+ */
 template< typename V >
 void readSTDVector(std::ifstream & file, V & v)
 {

@@ -68,47 +68,47 @@ public:
     std::cout << "size of vector is " << egstorage.size() << std::endl;
     ElementIterator tit = gv.template begin<0>();
     // loop once over the grid and find elements with given x_coord
-     for (ElementIterator it = gv.template begin<0>();
+    for (ElementIterator it = gv.template begin<0>();
          it!=gv.template end<0>(); ++it)
       {
         tit = it;
       }
-     {
-       //it=it-1;
-        EG eg(*tit);
+    {
+      //it=it-1;
+      EG eg(*tit);
 
-	// we will only add first element to the output storage
-	// it can be modified and add to storage arbitrary element of your choice,
-	// but only ONE!
-	if (egstorage.size()<1)
-	  egstorage.push_back(tit);
+      // we will only add first element to the output storage
+      // it can be modified and add to storage arbitrary element of your choice,
+      // but only ONE!
+      if (egstorage.size()<1)
+        egstorage.push_back(tit);
 
-	//     // cell geometry
-	//     const Dune::FieldVector<RF,dim>&
-	//       cell_center_local = Dune::ReferenceElements<RF,dim>::general(eg.geometry().type()).position(0,0);
-	//
-	//     Dune::FieldVector<RF, dim>
-	//       cell_center_global = eg.geometry().global(cell_center_local);
-	//
-	//     size_type nr_corners = eg.geometry().corners();
-	//     size_type nr_corners_half = nr_corners/2;
-	//
-	//     size_type nrx = 0;
-	//     size_type nry = 0;
-	//
-	//     for (unsigned int i=0; i<nr_corners; i++)
-	//       {
-	//         Dune::FieldVector<RF,dim> corner = eg.geometry().corner(i);
-	//         if (corner[0] < x_coord)
-	//           ++nrx;
-	//         if (corner[0] > x_coord)
-	//           ++nry;
-	//       }
-	//
-	//     // stores appropriate element iterators
-	//     if (nrx == nry  && nry== nr_corners_half)
-	//       egstorage.push_back(it);
-      }// end it
+      //     // cell geometry
+      //     const Dune::FieldVector<RF,dim>&
+      //       cell_center_local = Dune::ReferenceElements<RF,dim>::general(eg.geometry().type()).position(0,0);
+      //
+      //     Dune::FieldVector<RF, dim>
+      //       cell_center_global = eg.geometry().global(cell_center_local);
+      //
+      //     size_type nr_corners = eg.geometry().corners();
+      //     size_type nr_corners_half = nr_corners/2;
+      //
+      //     size_type nrx = 0;
+      //     size_type nry = 0;
+      //
+      //     for (unsigned int i=0; i<nr_corners; i++)
+      //       {
+      //         Dune::FieldVector<RF,dim> corner = eg.geometry().corner(i);
+      //         if (corner[0] < x_coord)
+      //           ++nrx;
+      //         if (corner[0] > x_coord)
+      //           ++nry;
+      //       }
+      //
+      //     // stores appropriate element iterators
+      //     if (nrx == nry  && nry== nr_corners_half)
+      //       egstorage.push_back(it);
+    }// end it
 
     if (egstorage.size()!=1)
       DUNE_THROW(Dune::Exception,"GnuplotSolutionTimeOutput: in egstorage should be exactly 1 Element!");

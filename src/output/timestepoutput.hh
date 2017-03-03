@@ -59,9 +59,9 @@ public:
     if (rank==0){
       s.open(dataFile.c_str());
       if (!s.is_open())
-	{
-	  DUNE_THROW(Dune::Exception, dataFile + " not opened");
-	}
+        {
+          DUNE_THROW(Dune::Exception, dataFile + " not opened");
+        }
 
       s << std::setprecision(14) << std::scientific;
     }
@@ -77,27 +77,27 @@ public:
   {
     if (rank==0)
       {
-	s.close();
-	GNUplot plotter;
+        s.close();
+        GNUplot plotter;
 
-	std::ostringstream os;
-	std::string soutput = dataFile;
-	soutput.replace(soutput.length()-3,soutput.length(),"eps");
+        std::ostringstream os;
+        std::string soutput = dataFile;
+        soutput.replace(soutput.length()-3,soutput.length(),"eps");
 
-	if (pdfoutput) {
-	  os << "set terminal postscript eps color \"Helvetica\" 20 ;\n"
-	     << "set output \"" <<  soutput << "\" ; \n" ;
-	}
+        if (pdfoutput) {
+          os << "set terminal postscript eps color \"Helvetica\" 20 ;\n"
+             << "set output \"" <<  soutput << "\" ; \n" ;
+        }
 
-	os << "set y2tics 2 nomirror ;\n"
-	   << "set ytics nomirror ;\n"
-	   << "set grid xtics y2tics nopolar;\n"
-	   << "set offsets 0,0,100,100;\n"
-	   << "solution_output=\"" << dataFile.c_str() << "\";\n"
-	   << "plot solution_output u 1:2 w l ti \"timesteps\", solution_output u 1:5 w p axes x1y2 ti \"NI\", solution_output u 1:3 w l ti \"min\", solution_output u 1:4 w l ti \"max\";\n ";
+        os << "set y2tics 2 nomirror ;\n"
+           << "set ytics nomirror ;\n"
+           << "set grid xtics y2tics nopolar;\n"
+           << "set offsets 0,0,100,100;\n"
+           << "solution_output=\"" << dataFile.c_str() << "\";\n"
+           << "plot solution_output u 1:2 w l ti \"timesteps\", solution_output u 1:5 w p axes x1y2 ti \"NI\", solution_output u 1:3 w l ti \"min\", solution_output u 1:4 w l ti \"max\";\n ";
 
-	plotter(os.str());
-	os.clear();
+        plotter(os.str());
+        os.clear();
       }
   }
 

@@ -216,32 +216,32 @@ public:
 
         if (!horizontal)
           for (unsigned int i=0; i<nr_corners; i++)
-          {
-            Dune::FieldVector<DF,dim> corner = eg.geometry().corner(i);
+            {
+              Dune::FieldVector<DF,dim> corner = eg.geometry().corner(i);
 
-            if (std::abs(corner[0]-x_coord)<1.e-6)
-              {
-                Dune::FieldVector<DF, dim> center = eg.geometry().center();
-                DUNE_THROW(Dune::Exception,"Element wit coordinates " << center << " is on the x-coordinate " << x_coord << " for cut output, corner " << corner);
+              if (std::abs(corner[0]-x_coord)<1.e-6)
+                {
+                  Dune::FieldVector<DF, dim> center = eg.geometry().center();
+                  DUNE_THROW(Dune::Exception,"Element wit coordinates " << center << " is on the x-coordinate " << x_coord << " for cut output, corner " << corner);
 
-              }
-            if (corner[0] < x_coord)
-              ++nrx;
-          }
+                }
+              if (corner[0] < x_coord)
+                ++nrx;
+            }
         else if (horizontal && dim>1)
           for (unsigned int i=0; i<nr_corners; i++)
-          {
-            Dune::FieldVector<DF,dim> corner = eg.geometry().corner(i);
+            {
+              Dune::FieldVector<DF,dim> corner = eg.geometry().corner(i);
 
-            if (std::abs(corner[1]-x_coord)<1.e-6)
-              {
-                Dune::FieldVector<DF, dim> center = eg.geometry().center();
-                DUNE_THROW(Dune::Exception,"Element wit coordinates " << center << " is on the x-coordinate " << x_coord << " for cut output, corner " << corner);
+              if (std::abs(corner[1]-x_coord)<1.e-6)
+                {
+                  Dune::FieldVector<DF, dim> center = eg.geometry().center();
+                  DUNE_THROW(Dune::Exception,"Element wit coordinates " << center << " is on the x-coordinate " << x_coord << " for cut output, corner " << corner);
 
-              }
-            if (corner[1] < x_coord)
-              ++nrx;
-          }
+                }
+              if (corner[1] < x_coord)
+                ++nrx;
+            }
         // stores appropriate element iterators
         if (nrx == nr_corners_half)
           egstorage.push_back(it);
@@ -272,10 +272,11 @@ public:
 
 
   struct my_sorter {
-    bool operator() (mergedList one, mergedList two) { return one.coordvalue < two.coordvalue ; }
+    bool operator() (mergedList& one, mergedList& two) { return one.coordvalue < two.coordvalue ; }
   };
 
-  // function reads a line from a given file and skipes all lines starting with an '#' character
+  //! function reads a line from a given file and skipes all lines
+  //! starting with an '#' character
   void skipComment(std::ifstream &infile)
   {
     if (infile.eof())
@@ -290,7 +291,8 @@ public:
                 std::string dummy;
                 std::getline(infile,dummy);
               }
-            else if ((c!='\a')&&(c!='\b')&&(c!='\f')&&(c!='\n')&&(c!='\r')&&(c!='\t')&&(c!='\v')&&(c!=' ')&&(c!='\'')&&(c!='\"'))
+            else if ((c!='\a')&&(c!='\b')&&(c!='\f')&&(c!='\n')&&
+                     (c!='\r')&&(c!='\t')&&(c!='\v')&&(c!=' ')&&(c!='\'')&&(c!='\"'))
               {
                 infile.unget(); // decrement get pointer
                 break;
@@ -390,9 +392,6 @@ public:
   }
 
 };
-
-
-
 
 
 template<typename GV>
