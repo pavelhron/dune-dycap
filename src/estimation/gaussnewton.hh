@@ -4,11 +4,11 @@
 #define GAUSSNEWTON_HH_
 
 #include<iostream>
-#include "compiler.h"
-#include <iomanip>
+#include<iomanip>
 #include<sstream>
 #include<vector>
 #include<map>
+#include"utilities.hh"
 #include "fitclass.hh"
 #include "iterativefitclass.hh"
 
@@ -119,7 +119,7 @@ FLOAT GaussNewtonClass::fitStep(FLOAT **sensitivityMatrix,vector<FLOAT> &weighte
   if (improvement>0.)
     {
       fitModel_.SetParameter(oldParam);
-      stepSize = Pow(SCALE_FACTOR_,step);
+      stepSize = std::pow(SCALE_FACTOR_,step);
       CheckParameter(correction,stepSize);
       yModel_=yModelTry[step];
       residuum_=residuumTry[step];

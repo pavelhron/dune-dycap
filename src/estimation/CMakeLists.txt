@@ -1,5 +1,4 @@
-install(FILES compiler.h
-              fitclass.hh
+install(FILES fitclass.hh
               fit_ecoli_model_base.hh
               gausnewton.hh
 	      iterativefitclass.hh
