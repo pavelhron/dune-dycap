@@ -283,7 +283,7 @@ public:
         s << agw  << "\t";
 
         // Joekar-Niasar 2008
-        agw = (234. + 3858.*sl - 0.224*pc - 3992*sl*sl + 0.006*sl*pc + 1.283e-5*pc*pc);
+        agw = kappa*(234. + 3858.*sl - 0.224*pc - 3992*sl*sl + 0.006*sl*pc + 1.283e-5*pc*pc);
         s << agw  << "\t";
 
         // Geistlinger
@@ -291,7 +291,7 @@ public:
         s << agw  << "\t";
 
         // quadratic
-        agw = (1699.4 - 1969.8*sl - 1.4*pc +274*sl*sl + 1.219*sl*pc +0.000289799*pc*pc);
+        agw = (1699.4 - 1969.8*sl - 1.40914*pc +274.156*sl*sl + 1.21931*sl*pc +0.000289799*pc*pc);
         s << agw  << "\t";
 
         s << "\n";
@@ -342,7 +342,8 @@ int main(int argc, char** argv)
     PhaseExchangeModels<double, TP> phaseexchange(tp,output);
     phaseexchange.output();
 
-    int r = system("gnuplot exchange.gpl");
+    int r1 = system("gnuplot exchange.gpl");
+    int r2 = system("./create_figures.sh");
 
 
     if(helper.rank()==0)
