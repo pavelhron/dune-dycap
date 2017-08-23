@@ -111,7 +111,7 @@ namespace Dune {
       typedef typename Traits::DomainFieldType DomainFieldType;
       typedef Dune::PDELab::MonomLocalFiniteElementMap<DomainFieldType, RangeFieldType, dim, 1> rFEM;
       typedef Dune::PDELab::GridFunctionSpace<GridView, rFEM> rGFS;
-      typedef typename Dune::PDELab::BackendVectorSelector<rGFS,RangeFieldType>::Type rVEC;
+      typedef typename Dune::PDELab::Backend::Vector<rGFS,RangeFieldType>::Type rVEC;
       typedef Dune::PDELab::LocalFunctionSpace<rGFS> rLFS;
       typedef Dune::PDELab::LFSIndexCache<rLFS> rLFSCache;
       typedef Dune::PDELab::DiscreteGridFunction<rGFS,rVEC> rDGF;

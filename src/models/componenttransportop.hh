@@ -5,8 +5,9 @@
 #include<src/utilities/rt0qfem.hh>
 #include<dune/localfunctions/lagrange/q1.hh>
 #include<dune/localfunctions/raviartthomas/raviartthomascube.hh>
+#include<dune/geometry/referenceelements.hh>
 #include<dune/pdelab/gridfunctionspace/gridfunctionspace.hh>
-
+#include<dune/pdelab/common/referenceelements.hh>
 #include<dune/pdelab/localoperator/defaultimp.hh>
 #include<dune/pdelab/localoperator/pattern.hh>
 #include<dune/pdelab/localoperator/flags.hh>
@@ -108,7 +109,7 @@ namespace Dune {
           Traits::LocalBasisType::Traits::DomainFieldType DF;
 
         // dimensions
-        const int dim = EG::Geometry::dimension;
+        const int dim = EG::Entity::dimension;
 
         // cell center
         const Dune::FieldVector<DF,dim>&
@@ -501,7 +502,7 @@ namespace Dune {
           Traits::LocalBasisType::Traits::DomainFieldType DF;
         // typedef typename LFSU::Traits::FiniteElementType::
         //   Traits::LocalBasisType::Traits::RangeFieldType RF;
-        const int dim = EG::Geometry::dimension;
+        const auto dim = EG::Entity::Entity::dimension;
 
         if (!first_stage) return; // time step calculation is only done in first stage
 
@@ -537,22 +538,18 @@ namespace Dune {
       template<typename EG, typename LFSV, typename R>
       void lambda_volume (const EG& eg, const LFSV& lfsv, R& r) const
       {
-        // domain and range field type
-        typedef typename LFSV::Traits::FiniteElementType::
-          Traits::LocalBasisType::Traits::DomainFieldType DF;
-        // typedef typename LFSV::Traits::FiniteElementType::
-        //  Traits::LocalBasisType::Traits::RangeFieldType RF;
-        const int dim = EG::Geometry::dimension;
+
 
         // no sources if cell is not active !
         if (!active_cell) return;
 
-        // cell center
-        const Dune::FieldVector<DF,dim>&
-          inside_local = Dune::ReferenceElements<DF,dim>::general(eg.entity().type()).position(0,0);
+         // cell center
+        auto geo = eg.geometry();
+        auto ref_el = referenceElement(geo);
+        auto inside_local = ref_el.position(0,0);
 
         // evaluate source term
-        typename TP::Traits::RangeFieldType q = tp.q(eg.entity(),inside_local);
+        auto q = tp.q(eg.entity(),inside_local);
 
         if (q>0)
           {
@@ -698,7 +695,7 @@ namespace Dune {
           Traits::LocalBasisType::Traits::DomainFieldType DF;
 
         // dimensions
-        const int dim = EG::Geometry::dimension;
+        const int dim = EG::Entity::dimension;
 
         // cell center
         const Dune::FieldVector<DF,dim>&
@@ -739,7 +736,7 @@ namespace Dune {
           Traits::LocalBasisType::Traits::DomainFieldType DF;
 
         // dimensions
-        const int dim = EG::Geometry::dimension;
+        const int dim = EG::Entity::Entity::dimension;
 
         // cell center
         const Dune::FieldVector<DF,dim>&

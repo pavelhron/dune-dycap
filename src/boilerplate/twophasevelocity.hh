@@ -36,7 +36,7 @@ namespace Dune {
 
       typedef Dune::PDELab::GridFunctionSpace<GV,RT0FEM,Dune::PDELab::P0ParallelConstraints,Dune::PDELab::istl::VectorBackend<> > RT0GFS;
 
-      typedef typename Dune::PDELab::BackendVectorSelector<RT0GFS,RF>::Type RT0VEC;
+      typedef typename Dune::PDELab::Backend::Vector<RT0GFS,RF> RT0VEC;
       typedef Dune::PDELab::DiscreteGridFunctionPiola<RT0GFS,RT0VEC> RT0DGF;
 
       TwoPhaseVelocity(const GV &gv_, TP & tp, P_lDGF & p_ldgf, P_cDGF & p_cdgf)

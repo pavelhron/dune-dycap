@@ -518,7 +518,7 @@ namespace Dune {
       typedef Dune::PDELab::RT0QLocalFiniteElementMap<GV,DF,RF,dim> RT0FEM; // RT0 FEM
       typedef Dune::PDELab::GridFunctionSpace<GV,RT0FEM,Dune::PDELab::NoConstraints,
                                              Dune::PDELab::istl::VectorBackend<> > RT0GFS;
-      typedef typename Dune::PDELab::BackendVectorSelector<RT0GFS,RF>::Type RT0VEC; // vector backend
+      typedef typename Dune::PDELab::Backend::Vector<RT0GFS,RF>::Type RT0VEC; // vector backend
       typedef Dune::PDELab::DiscreteGridFunctionPiola<RT0GFS,RT0VEC> VELDGF; // discrete grid function for velocity
 
 

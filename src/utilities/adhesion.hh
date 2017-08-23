@@ -6,7 +6,7 @@
 
 #include <vector>
 #include <dune/common/parametertreeparser.hh>
-#include<dune/pdelab/backend/istl.hh>
+#include <dune/pdelab/backend/istl.hh>
 #include <dune/pdelab/common/function.hh>
 #include <dune/pdelab/gridfunctionspace/localfunctionspace.hh>
 
@@ -44,7 +44,7 @@ public:
   typedef Dune::PDELab::LocalFunctionSpace<GFS> LFS;
 
   //! \brief export type of the vector for the bacterial concentration
-  typedef typename Dune::PDELab::BackendVectorSelector<GFS,RangeFieldType>::Type CV;
+  typedef typename Dune::PDELab::Backend::Vector<GFS,RangeFieldType>::Type CV;
 
 public:
   Adhesion(const GFS & gfs_, VEL & vel_, const Dune::ParameterTree param) :

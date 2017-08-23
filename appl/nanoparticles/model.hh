@@ -22,7 +22,7 @@
 
 
 #include<src/newton/newton.hh>
-#include<dune/pdelab/backend/istlsolverbackend.hh>
+#include<dune/pdelab/backend/istl.hh>
 #include<dune/pdelab/stationary/linearproblem.hh>
 #include<dune/pdelab/instationary/onestep.hh>
 
@@ -83,7 +83,7 @@ namespace Dune {
 
       // grid operator types
       typedef typename GFS::template ConstraintsContainer<RF>::Type C;
-      typedef typename Dune::PDELab::BackendVectorSelector<GFS,RF>::Type CV;
+      typedef Dune::PDELab::Backend::Vector<GFS,RF> CV;
       typedef Dune::PDELab::DiscreteGridFunction<GFS,CV> ConcDGF;
 
       typedef Dune::PDELab::DefaultFluxReconstruction<typename CTP::Traits> DFR;
@@ -102,7 +102,7 @@ namespace Dune {
       typedef Dune::PDELab::GridOperator<GFS,GFS,MLOP,MBE,RF,RF,RF,C,C> GO1;
       typedef Dune::PDELab::OneStepGridOperator<GO0,GO1,false> IGO;
       typedef Dune::PDELab::OneStepGridOperator<DGO0,GO1,true> DIGO;
-      typedef typename Dune::PDELab::BackendVectorSelector<GFS,RF>::Type V;
+      typedef Dune::PDELab::Backend::Vector<GFS,RF> V;
 
       typedef Dune::PDELab::ISTLBackend_OVLP_ExplicitDiagonal<GFS> LS;
       typedef Dune::PDELab::SimpleTimeController<RF> TC;
