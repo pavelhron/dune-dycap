@@ -29,7 +29,7 @@ namespace Dune {
       typedef typename LFS::Traits::SizeType size_type;
       typedef typename GFS::Traits::FiniteElementType::Traits::LocalBasisType::Traits LBTraits;
       typedef typename LBTraits::RangeFieldType RF;
-      typedef typename Dune::PDELab::BackendVectorSelector<GFS,RF>::Type X;
+      using X = Dune::PDELab::Backend::Vector<GFS,RF>;
       typedef typename LBTraits::RangeType RangeType;
 
 
@@ -297,11 +297,11 @@ namespace Dune {
       typedef typename LFS::Traits::SizeType size_type;
       typedef typename GFS::Traits::FiniteElementType::Traits::LocalBasisType::Traits LBTraits;
       typedef typename LBTraits::RangeFieldType RF;
-      typedef typename Dune::PDELab::BackendVectorSelector<GFS,RF>::Type X;
+      using X = Dune::PDELab::Backend::Vector<GFS,RF>;
       typedef typename LBTraits::RangeType RangeType;
       typedef Dune::PDELab::MonomLocalFiniteElementMap<DF,RF, dim, 1> rFEM;
       typedef Dune::PDELab::GridFunctionSpace<GV, rFEM> rGFS;
-      typedef typename Dune::PDELab::BackendVectorSelector<rGFS,RF>::Type rVEC;
+      using rVEC = Dune::PDELab::Backend::Vector<rGFS,RF>;
       typedef Dune::PDELab::LocalFunctionSpace<rGFS> rLFS;
       typedef Dune::PDELab::LFSIndexCache<rLFS> rLFSCache;
       typedef Dune::PDELab::DiscreteGridFunction<rGFS,rVEC> rDGF;
@@ -438,7 +438,7 @@ namespace Dune {
 
                 if (iit->neighbor())
                   {
-                    lfsnb.bind(*(iit->outside()));
+                    lfsnb.bind((iit->outside()));
                     lfsnb_cache.update();
                     std::vector<RF> xlnb(lfsnb.size());
                     x_view.bind(lfsnb_cache);

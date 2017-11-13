@@ -326,17 +326,17 @@ namespace Dune {
 
         RF c_O2_liquid = tp.c_O2_liquid(eg.entity(),cell_center_local,x(lfsu,oliquid));
         RF c_DOC = tp.c_DOC(eg.entity(),cell_center_local,x(lfsu,doc));
-        RF X = tp.c_Ecoli(eg.entity(),cell_center_local,x(lfsu,ecoli));
+        RF Xv = tp.c_Ecoli(eg.entity(),cell_center_local,x(lfsu,ecoli));
         RF K_H =  tp.K_H(eg.entity(),cell_center_local);
 
-        RF ft1 = mumax * c_DOC/ (c_DOC + Ks) * c_O2_liquid/ (c_O2_liquid + Ko)*X;
-        RF ft2 = mumax_ae * c_DOC/ (c_DOC + Ks_ae)*X;
+        RF ft1 = mumax * c_DOC/ (c_DOC + Ks) * c_O2_liquid/ (c_O2_liquid + Ko)*Xv;
+        RF ft2 = mumax_ae * c_DOC/ (c_DOC + Ks_ae)*Xv;
 
         // contribution from source term
         r.accumulate(lfsv,oliquid,ft1/Yo);
         r.accumulate(lfsv,ogas,x(lfsu,ogas)*K_H-x(lfsu,oliquid));
         r.accumulate(lfsv,doc,(ft1+ft2)/Ys);
-        r.accumulate(lfsv,ecoli,-(ft1+ft2)+Kd*X);
+        r.accumulate(lfsv,ecoli,-(ft1+ft2)+Kd*Xv);
       }
 
 
@@ -450,13 +450,13 @@ namespace Dune {
         RF c_O2_liquid = tp.c_O2_liquid(eg.entity(),cell_center_local,x(lfsu,oliquid));
         RF c_O2_gas = tp.c_O2_gas(eg.entity(),cell_center_local,x(lfsu,ogas));
         RF c_DOC = tp.c_DOC(eg.entity(),cell_center_local,x(lfsu,doc));
-        RF X = tp.c_Ecoli(eg.entity(),cell_center_local,x(lfsu,ecoli));
+        RF Xv = tp.c_Ecoli(eg.entity(),cell_center_local,x(lfsu,ecoli));
 
         // contribution from source term
         r.accumulate(lfsv,oliquid,c_O2_liquid+c_O2_gas); //?? 2*c_O2_liquid
         r.accumulate(lfsv,ogas,0.);
         r.accumulate(lfsv,doc,c_DOC);
-        r.accumulate(lfsv,ecoli,X);
+        r.accumulate(lfsv,ecoli,Xv);
       }
 
       typename TP::Traits::RangeFieldType suggestTimestep (typename TP::Traits::RangeFieldType dt) const
@@ -600,13 +600,13 @@ namespace Dune {
 
         RF c_O2_liquid = tp.c_O2_liquid(eg.entity(),cell_center_local,x(lfsu,oliquid));
         RF c_DOC = tp.c_DOC(eg.entity(),cell_center_local,x(lfsu,doc));
-        RF X = tp.c_Ecoli(eg.entity(),cell_center_local,x(lfsu,ecoli));
+        RF Xv = tp.c_Ecoli(eg.entity(),cell_center_local,x(lfsu,ecoli));
         RF K_H =  tp.K_H(eg.entity(),cell_center_local);
 
-        RF ft = mumax * std::pow(c_DOC/ (c_DOC + Ks),exponent) * c_O2_liquid/ (c_O2_liquid + Ko)*X;
+        RF ft = mumax * std::pow(c_DOC/ (c_DOC + Ks),exponent) * c_O2_liquid/ (c_O2_liquid + Ko)*Xv;
 
 
-        celldt = std::abs(X/ft);
+        celldt = std::abs(Xv/ft);
         celldt = std::min(celldt,std::abs(c_DOC*Ys/ft));
         celldt = std::min(celldt,std::abs(c_O2_liquid / (k_l*(K_H*x(lfsu,ogas)-x(lfsu,oliquid))+ft/Yo)));
 
@@ -757,13 +757,13 @@ namespace Dune {
         RF c_O2_liquid = tp.c_O2_liquid(eg.entity(),cell_center_local,x(lfsu,oliquid));
         RF c_O2_gas = tp.c_O2_gas(eg.entity(),cell_center_local,x(lfsu,ogas));
         RF c_DOC = tp.c_DOC(eg.entity(),cell_center_local,x(lfsu,doc));
-        RF X = tp.c_Ecoli(eg.entity(),cell_center_local,x(lfsu,ecoli));
+        RF Xv = tp.c_Ecoli(eg.entity(),cell_center_local,x(lfsu,ecoli));
 
         // contribution from source term
         r.accumulate(lfsv,oliquid,c_O2_liquid);
         r.accumulate(lfsv,ogas,c_O2_gas);
         r.accumulate(lfsv,doc,c_DOC);
-        r.accumulate(lfsv,ecoli,X);
+        r.accumulate(lfsv,ecoli,Xv);
       }
 
       typename TP::Traits::RangeFieldType suggestTimestep (typename TP::Traits::RangeFieldType dt) const

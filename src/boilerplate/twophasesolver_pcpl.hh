@@ -22,7 +22,6 @@
 #include<dune/pdelab/gridoperator/gridoperator.hh>
 #include<dune/pdelab/gridoperator/onestep.hh>
 #include<dune/pdelab/backend/istl.hh>
-#include<dune/pdelab/backend/istl.hh>
 
 #include<src/newton/newton.hh>
 #include<src/newton/newton_utilities.hh>

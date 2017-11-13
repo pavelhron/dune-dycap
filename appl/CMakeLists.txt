@@ -1,3 +1,5 @@
 add_subdirectory("twophase_test")
 add_subdirectory("nanoparticles")
 add_subdirectory("phase_exchange")
+add_subdirectory("turing")
+add_subdirectory("dfz_experiment")

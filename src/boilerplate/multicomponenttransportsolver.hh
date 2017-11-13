@@ -25,8 +25,7 @@
 
 #include<src/newton/newton_reaction.hh>
 #include<src/newton/newton_utilities.hh>
-#include<dune/pdelab/backend/istlsolverbackend.hh>
-#include<dune/pdelab/backend/istl/bcrsmatrixbackend.hh>
+#include<dune/pdelab/backend/istl.hh>
 #include<dune/pdelab/stationary/linearproblem.hh>
 #include<dune/pdelab/instationary/onestep.hh>
 
@@ -61,8 +60,8 @@ namespace Dune {
       typedef Dune::PDELab::GridFunctionSpace<GV,FEM,CON,VBE0> GFS;
 
       // pgfs with blockwise mapper
-      typedef Dune::PDELab::ISTLVectorBackend
-      <Dune::PDELab::ISTLParameters::static_blocking,CTP::COMPONENTS> VBE;
+      typedef Dune::PDELab::istl::VectorBackend
+      <Dune::PDELab::istl::Blocking::fixed,CTP::COMPONENTS> VBE;
       typedef Dune::PDELab::PowerGridFunctionSpace<GFS,CTP::COMPONENTS,VBE,
                                                    Dune::PDELab::EntityBlockedOrderingTag> PGFS;
       // grid operator types
@@ -79,7 +78,7 @@ namespace Dune {
       typedef Dune::PDELab::GridOperator<PGFS,PGFS,MLOP,MBE,RF,RF,RF,C,C> GO1;
       typedef Dune::PDELab::OneStepGridOperator<GO0,GO1,true> IGO;
       //typedef typename IGO::Traits::Domain V;
-      typedef typename Dune::PDELab::BackendVectorSelector<PGFS,RF>::Type V;
+      using V = Dune::PDELab::Backend::Vector<PGFS,RF>;
       typedef DiscreteGridFunctionFromPGF<PGFS,V,CTP::COMPONENTS> DGF;
 
       typedef VectorDiscreteGridFunction<PGFS,V> VDGF;

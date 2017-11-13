@@ -214,6 +214,151 @@ namespace Dune {
     };
 
 
+
+    template<class T, class Imp>
+    class DiffusionMulticomponentInterface;
+
+    template<typename GV, typename RF>
+    struct DiffusionParameterTraits;
+
+
+    /** \brief Collect k instances of type T within a \ref TypeTree.
+     *
+     *  \tparam T The base type
+     *  \tparam k The number of instances this node should collect
+     */
+
+    //! Base class for composite nodes based on variadic templates.
+    template<typename GV, typename RF, typename T, std::size_t k>
+    class MulticomponentDiffusion:
+      public Dune::PDELab::DiffusionMulticomponentInterface<Dune::PDELab::DiffusionParameterTraits<GV,RF>, MulticomponentDiffusion<GV,RF,T,k> >
+    {
+
+    public:
+      typedef typename T::Traits Traits;
+
+      //! The number of Components.
+      static const std::size_t COMPONENTS = k;
+
+      //! The type of each component.
+      typedef T ComponentType;
+
+      //! The storage type of each component.
+      typedef shared_ptr<T> ComponentStorageType;
+
+      //! The const version of the storage type of each component.
+      typedef shared_ptr<const T> ComponentConstStorageType;
+
+      //! The type used for storing the Components.
+      typedef array<ComponentStorageType,k> NodeStorage;
+
+
+      //! Access to the type and storage type of the i-th component.
+      template<std::size_t i>
+      struct Component
+      {
+
+        static_assert((i < COMPONENTS), "component index out of range");
+
+        //! The type of the component.
+        typedef T Type;
+
+        //! The storage type of the component.
+        typedef ComponentStorageType Storage;
+
+        //! The const storage type of the component.
+        typedef ComponentConstStorageType ConstStorage;
+      };
+
+
+
+      T& component (std::size_t i)
+      {
+        assert(i < COMPONENTS && "component index out of range");
+        return *_Components[i];
+      }
+
+      //! Returns the i-th component (const version).
+      /**
+       * \returns a const reference to the i-th component.
+       */
+      const T& component (std::size_t i) const
+      {
+        assert(i < COMPONENTS && "component index out of range");
+        return *_Components[i];
+      }
+
+
+      //! Returns the storage of the i-th component.
+      /**
+       * \returns a copy of the object storing the i-th component.
+       */
+      ComponentStorageType componentStorage(std::size_t i)
+      {
+        assert(i < COMPONENTS && "component index out of range");
+        return _Components[i];
+      }
+
+      ComponentConstStorageType componentStorage (std::size_t i) const
+      {
+        assert(i < COMPONENTS && "component index out of range");
+        return (_Components[i]);
+      }
+
+      //! Sets the i-th component to the passed-in value.
+      void setComponent (std::size_t i, T& t)
+      {
+        assert(i < COMPONENTS && "component index out of range");
+        _Components[i] = stackobject_to_shared_ptr(t);
+      }
+
+      //! Sets the stored value representing the i-th component to the passed-in value.
+      void setComponent (std::size_t i, ComponentStorageType st)
+      {
+        assert(i < COMPONENTS && "component index out of range");
+        _Components[i] = st;
+      }
+
+      void setTime(RF time)
+      {
+        for (std::size_t i = 0; i<COMPONENTS; i++)
+          _Components[i]->setTime(time);
+      }
+
+      void setTimeTarget(RF time, RF dt)
+      {
+        for (std::size_t i = 0; i<COMPONENTS; i++)
+          _Components[i]->setTimeTarget(time,dt);
+      }
+
+      void preStep(RF time, RF dt, int stages)
+      {
+        for (std::size_t i = 0; i<COMPONENTS; i++)
+          _Components[i]->preStep(time,dt,stages);
+      }
+
+      // constructor for objects
+      template<typename... Components>
+      MulticomponentDiffusion (Components&&... components)
+      {
+        assign_reference_pack_to_shared_ptr_array(_Components,std::forward<Components>(components)...);
+      }
+
+      // constructor for pointers!!
+      template<typename... Components>
+      MulticomponentDiffusion (Components*... components)
+      {
+        assign_pointer_pack_to_shared_ptr_array(_Components,std::forward<Components*>(components)...);
+      }
+
+      //! @}
+
+    private:
+      NodeStorage _Components;
+    };
+
+
+
   } // namespace PDELab
 } //namespace Dune
 

@@ -8,14 +8,13 @@
 #include<map>
 #include<dune/common/exceptions.hh>
 #include<dune/common/parametertreeparser.hh>
-#include <dune/common/tuples.hh>
-#include <dune/common/shared_ptr.hh>
-#include <dune/common/deprecated.hh>
+#include<dune/common/shared_ptr.hh>
+#include<dune/common/deprecated.hh>
 
-#include<dune/dycap/physics/hydraulicparameters.hh>
-#include<dune/dycap/physics/physical_chemistry.hh>
+#include<src/physics/hydraulicparameters.hh>
+#include<src/physics/physical_chemistry.hh>
 #include"twophaseparameters.hh"
-#include <dune/dycap/utilities/inlets_utilities.hh>
+#include <src/utilities/inlets_utilities.hh>
 
 
 namespace Dune {
@@ -259,7 +258,7 @@ public:
         const IIterator &iend = tp.getGridView().iend(*eit);
         for(IIterator iit = tp.getGridView().ibegin(*eit); iit != iend; ++iit)
           // for a universal mapper, this will create a new map entry
-          intersectionMapper->map(*eit, iit->indexInInside(), dim-1);
+          intersectionMapper->subIndex(*eit, iit->indexInInside(), dim-1);
       }
     }
     return intersectionMapper;
@@ -298,8 +297,8 @@ public:
               global = ig.intersection().geometry().global(face_local);
 
             typename Traits::RangeType velo;
-            udgf.evaluate(*(ig.inside()),global,velo);
-            velocityvector[intersectionMapper->map(*ig.inside(), ig.indexInInside(), dim-1)] = velo;
+            udgf.evaluate((ig.inside()),global,velo);
+            velocityvector[intersectionMapper->subIndex(ig.inside(), ig.indexInInside(), dim-1)] = velo;
           }
 
       }
@@ -352,7 +351,7 @@ public:
   typename Traits::RangeType
   v (const typename Traits::IntersectionType& is, const typename Traits::IntersectionDomainType& x) const
   {
-    return v(*is.inside(), is.geometryInInside().center());
+    return v(is.inside(), is.geometryInInside().center());
   }
 
   //! velocityvector
@@ -454,7 +453,7 @@ public:
   {
     typename Traits::RangeType global = is.geometry().global(x);
 
-    typename Traits::RangeType velo=v(*is.inside(), is.geometryInInside().center());
+    typename Traits::RangeType velo=v(is.inside(), is.geometryInInside().center());
     RF vn = velo*is.centerUnitOuterNormal();
 
     //outflow
@@ -605,7 +604,7 @@ public:
   typename Traits::RangeType
   v (const typename Traits::IntersectionType& is, const typename Traits::IntersectionDomainType& x) const
   {
-    return v(*is.inside(), is.geometryInInside().center());
+    return v(is.inside(), is.geometryInInside().center());
   }
 
   //! velocityvector
@@ -691,7 +690,7 @@ public:
   {
     typename Traits::RangeType global = is.geometry().global(x);
 
-    typename Traits::RangeType velo=v(*is.inside(), is.geometryInInside().center());
+    typename Traits::RangeType velo=v(is.inside(), is.geometryInInside().center());
     RF vn = velo*is.centerUnitOuterNormal();
 
     // if (global[1]<1.e-3)

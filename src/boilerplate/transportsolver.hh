@@ -10,7 +10,7 @@
 #include<dune/common/timer.hh>
 #include<dune/common/parametertreeparser.hh>
 
-#include"../oldpdelab/pdelab.hh"
+//#include"../oldpdelab/pdelab.hh"
 
 #include<dune/pdelab/finiteelementmap/p0fem.hh>
 #include<dune/pdelab/constraints/common/constraints.hh>
@@ -27,8 +27,7 @@
 #include<dune/pdelab/backend/istl.hh>
 
 #include<src/newton/newton.hh>
-#include<dune/pdelab/backend/istlsolverbackend.hh>
-#include<dune/pdelab/backend/istl/bcrsmatrixbackend.hh>
+#include<dune/pdelab/backend/istl.hh>
 #include<dune/pdelab/stationary/linearproblem.hh>
 #include<dune/pdelab/instationary/onestep.hh>
 
@@ -89,7 +88,7 @@ namespace Dune {
 
       // grid operator types
       typedef typename GFS::template ConstraintsContainer<RF>::Type C;
-      typedef typename Dune::PDELab::BackendVectorSelector<GFS,RF>::Type CV;
+      using CV = Dune::PDELab::Backend::Vector<GFS,RF>;
       typedef Dune::PDELab::DiscreteGridFunction<GFS,CV> DGF;
 
       typedef Dune::PDELab::LimiterFV<typename CTP::Traits, GFS> Limiter;
@@ -106,7 +105,8 @@ namespace Dune {
       typedef Dune::PDELab::GridOperator<GFS,GFS,LOP,MBE,RF,RF,RF,C,C> GO0;
       typedef Dune::PDELab::GridOperator<GFS,GFS,MLOP,MBE,RF,RF,RF,C,C> GO1;
       typedef Dune::PDELab::OneStepGridOperator<GO0,GO1,false> IGO;
-      typedef typename Dune::PDELab::BackendVectorSelector<GFS,RF>::Type V;
+      using V = Dune::PDELab::Backend::Vector<GFS,RF>;
+
       typedef Dune::PDELab::ISTLBackend_OVLP_ExplicitDiagonal<GFS> LS;
       typedef Dune::PDELab::SimpleTimeController<RF> TC;
       typedef Dune::PDELab::ExplicitOneStepMethod<RF,IGO,LS,CV,CV,TC> OSM;
@@ -311,7 +311,7 @@ namespace Dune {
 
       // grid operator types
       typedef typename GFS::template ConstraintsContainer<RF>::Type C;
-      typedef typename Dune::PDELab::BackendVectorSelector<GFS,RF>::Type CV;
+      using CV = Dune::PDELab::Backend::Vector<GFS,RF>;
       typedef Dune::PDELab::DiscreteGridFunction<GFS,CV> DGF;
 
       typedef Dune::PDELab::DefaultFluxReconstruction<typename CTP::Traits> DFR;
@@ -756,7 +756,7 @@ namespace Dune {
 
       // grid operator types
       typedef typename GFS::template ConstraintsContainer<RF>::Type C;
-      typedef typename Dune::PDELab::BackendVectorSelector<GFS,RF>::Type CV;
+      using CV = Dune::PDELab::Backend::Vector<GFS,RF>;
       typedef Dune::PDELab::DiscreteGridFunction<GFS,CV> ConcDGF;
 
       typedef Dune::PDELab::ImplicitCCFVSpatialTransportOperator<CTP,RA> LOP;
@@ -940,7 +940,7 @@ namespace Dune {
 
       // grid operator types
       typedef typename GFS::template ConstraintsContainer<RF>::Type C;
-      typedef typename Dune::PDELab::BackendVectorSelector<GFS,RF>::Type CV;
+      using CV = Dune::PDELab::Backend::Vector<GFS,RF>;
       typedef Dune::PDELab::DiscreteGridFunction<GFS,CV> DGF;
 
       typedef Dune::PDELab::DefaultFluxReconstruction<typename CTP::Traits> DFR;
@@ -1098,7 +1098,7 @@ namespace Dune {
       template<typename PVD>
       void setOutput(PVD & pvdwriter)
       {
-        pvdwriter.addCellData(new Dune::PDELab::VTKGridFunctionAdapter<ConcDGF>(concdgf,ctp.getName()));
+        pvdwriter.addCellData(std::make_shared<Dune::PDELab::VTKGridFunctionAdapter<ConcDGF>>(concdgf,ctp.getName()));
       }
 
       ConcDGF & getConcDGF(){return concdgf;}

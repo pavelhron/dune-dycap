@@ -10,7 +10,7 @@
 #include<dune/common/parametertreeparser.hh>
 
 #include"twophaseparameters.hh"
-#include<dune/dycap/models/reactionop.hh>
+#include<src/models/reactionop.hh>
 
 
 template<typename GV, typename RF, typename TP,  typename SLDGF, typename VEL>
